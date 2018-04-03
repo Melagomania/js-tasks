@@ -1,4 +1,7 @@
 function createCounter(startCount = 0, incrementor = 1) {
+  if(!(typeof(startCount) === 'number' && typeof(incrementor) === 'number' ) ) {
+    throw new SyntaxError('Only numeric params are allowed');
+  }
   var count = startCount;
   var counted = false;
   function counter() {
