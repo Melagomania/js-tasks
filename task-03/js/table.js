@@ -1,13 +1,13 @@
 // table creation and interactions
 window.onload = function() {
   var   table = document.getElementsByClassName('table')[0],
-  renderBtn = document.getElementsByClassName('js-cta-render-table')[0],
-  colStartInput = document.getElementsByClassName('js-config-output-cols')[0],
-  rowStartInput = document.getElementsByClassName('js-config-output-rows')[0],
-  tableSizeInput = document.getElementsByClassName('js-config-output-size')[0],
-  
-  config,
-  tableContent;
+        renderBtn = document.getElementsByClassName('js-cta-render-table')[0],
+        colStartInput = document.getElementsByClassName('js-config-output-cols')[0],
+        rowStartInput = document.getElementsByClassName('js-config-output-rows')[0],
+        tableSizeInput = document.getElementsByClassName('js-config-output-size')[0],
+        
+        config,
+        tableContent;
   
   renderBtn.addEventListener('click', function(e) {
     config = getConfig();
@@ -49,34 +49,58 @@ window.onload = function() {
     }
     table.appendChild(tableFragment);
     addMouseoverListener();
+    addRemoveListener();
   }
 
   function addMouseoverListener() {
+    var thead = document.getElementsByTagName('thead')[0];
     table.addEventListener('mouseover', function(e) {
-      var target = e.target;
-      var parent = target.parentNode;
-      var rowHeading =    parent.children[0],
-                          colHeading = target.parentNode.parentNode.parentNode.children[0].children[0].children[target.cellIndex];
+      if(e.target.tagName === 'TD' || e.target.tagName === 'TH') {
+        var   target = e.target,
+              parent = target.parentNode,
+              rowHeading = parent.children[0],
+              colHeading = thead.firstChild.children[target.cellIndex];
 
-      target.classList.add('highlighted');
-      rowHeading.classList.add('highlighted');
-      colHeading.classList.add('highlighted');
-      });
+        if(target.tagName != 'TH') {
+          target.classList.add('highlighted');
+          rowHeading.classList.add('highlighted');
+          colHeading.classList.add('highlighted');
+        }
+      }
+    });
     table.addEventListener('mouseout', function(e) {
-      var target = e.target;
-      var parent = target.parentNode;
-      var rowHeading =    parent.children[0],
-                          colHeading = target.parentNode.parentNode.parentNode.children[0].children[0].children[target.cellIndex];
+      if(e.target.tagName === 'TD' || e.target.tagName === 'TH') {
+        var target = e.target;
+        var parent = target.parentNode;
+        var rowHeading =    parent.children[0],
+                            colHeading = target.parentNode.parentNode.parentNode.children[0].children[0].children[target.cellIndex];
 
-      target.classList.remove('highlighted');
-      rowHeading.classList.remove('highlighted');
-      colHeading.classList.remove('highlighted');
+          target.classList.remove('highlighted');
+          rowHeading.classList.remove('highlighted');
+          colHeading.classList.remove('highlighted');
+      }
+    });
+    
+  }
+
+  function addRemoveListener() {
+    table.addEventListener('click', function(e) {
+      var target = e.target,
+          currentRow = target.parentNode, 
+          upperRow = target.parentNode.previousSibling;
+      if(e.ctrlKey) {
+        currentRow.parentNode.removeChild(currentRow);
+      } else {
+      currentRow.parentNode.removeChild(upperRow);
+      currentRow.insertAdjacentElement('afterEnd', upperRow);
+      }
+      
     });
   }
 
   function clearTable() {
-    var newTable = table.cloneNode(false);
-    table.parentElement.replaceChild(newTable, table);
-    table = document.getElementsByClassName('table')[0];
+    while(table.firstChild) {
+      table.removeChild(table.firstChild);
+    }
   }
 }
