@@ -38,4 +38,4 @@ function multiplicationTable(colStart, rowStart, size) {
 
   return(result);
 }
-console.log(multiplicationTable(1, 3, 4));
+// console.log(multiplicationTable(1, 3, 4));
