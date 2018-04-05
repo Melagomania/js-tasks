@@ -27,5 +27,5 @@ console.log(
 //ES6
 console.log(
   passToCallbackES6(1, 2, 3, 5, (...args) => args.map(num => num * 2)),
-  passToCallbackES6(4, 3, 2, 1, (...args) => args.reduce((cur, prev) => prev * cur)),
+  passToCallbackES6(4, 3, 2, 1, (...args) => args.reduce((cur, prev) => prev * cur))
 )
