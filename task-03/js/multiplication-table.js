@@ -5,11 +5,10 @@ function multiplicationTable(colStart, rowStart, size) {
   }
   var result = [];
   var headings = generateColHeadings(colStart);
-  console.log(headings);
   result.push(headings);
-  console.log(result);  
   result = result.concat(calculateRows(rowStart, headings)); 
-
+  result[0][0] = null;
+  
   function generateColHeadings(colStart) {
     var res = [];
     for(let i = 0; i <= size; i++) {
@@ -36,7 +35,7 @@ function multiplicationTable(colStart, rowStart, size) {
     }
     return res;
   }
-  result[0][0] = null;
+
   return(result);
 }
 console.log(multiplicationTable(1, 3, 4));
