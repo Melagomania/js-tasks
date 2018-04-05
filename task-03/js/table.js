@@ -88,7 +88,7 @@ window.onload = function() {
       var target = e.target,
           currentRow = target.parentNode, 
           upperRow = target.parentNode.previousSibling;
-      if(e.ctrlKey) {
+      if(e.ctrlKey && target.tagName !== "TH") {
         currentRow.parentNode.removeChild(currentRow);
       } else {
       currentRow.parentNode.removeChild(upperRow);
