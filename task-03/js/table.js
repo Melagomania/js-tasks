@@ -12,9 +12,7 @@ window.onload = function() {
   renderBtn.addEventListener('click', function(e) {
     config = getConfig();
     tableContent = multiplicationTable(...config);
-    var dt = new Date();
     renderTable(tableContent);
-    console.log(new Date - dt);
     e.preventDefault();
   });
   
@@ -49,52 +47,45 @@ window.onload = function() {
     }
     table.appendChild(tableFragment);
     addMouseoverListener();
-    addRemoveListener();
+    addClickListener();
   }
 
   function addMouseoverListener() {
-    var thead = document.getElementsByTagName('thead')[0];
     table.addEventListener('mouseover', function(e) {
-      if(e.target.tagName === 'TD' || e.target.tagName === 'TH') {
-        var   target = e.target,
-              parent = target.parentNode,
-              rowHeading = parent.children[0],
-              colHeading = thead.firstChild.children[target.cellIndex];
-
-        if(target.tagName != 'TH') {
-          target.classList.add('highlighted');
-          rowHeading.classList.add('highlighted');
-          colHeading.classList.add('highlighted');
-        }
+      if(e.target.tagName === "TD") {
+        highlight(e.target);
       }
     });
     table.addEventListener('mouseout', function(e) {
-      if(e.target.tagName === 'TD' || e.target.tagName === 'TH') {
-        var target = e.target;
-        var parent = target.parentNode;
-        var rowHeading =    parent.children[0],
-                            colHeading = target.parentNode.parentNode.parentNode.children[0].children[0].children[target.cellIndex];
-
-          target.classList.remove('highlighted');
-          rowHeading.classList.remove('highlighted');
-          colHeading.classList.remove('highlighted');
+      if(e.target.tagName === "TD") {
+        highlight(e.target);
       }
     });
-    
   }
 
-  function addRemoveListener() {
+  function highlight(target) {
+    var   thead = document.getElementsByTagName('thead')[0],    
+          parent = target.parentNode,
+          rowHeading = parent.children[0],
+          colHeading = thead.firstChild.children[target.cellIndex];
+    
+    target.classList.toggle('highlighted');
+    rowHeading.classList.toggle('highlighted');
+    colHeading.classList.toggle('highlighted');
+  }
+
+  function addClickListener() {
     table.addEventListener('click', function(e) {
       var target = e.target,
           currentRow = target.parentNode, 
           upperRow = target.parentNode.previousSibling;
-      if(e.ctrlKey && target.tagName !== "TH") {
-        currentRow.parentNode.removeChild(currentRow);
-      } else {
-      currentRow.parentNode.removeChild(upperRow);
-      currentRow.insertAdjacentElement('afterEnd', upperRow);
-      }
-      
+      if(target.tagName !== "TH") {
+        if(e.ctrlKey) {
+          currentRow.parentNode.removeChild(currentRow);
+        } else if(target.parentNode !== target.parentNode.parentNode.firstChild) {
+          currentRow.insertAdjacentElement('afterEnd', upperRow);
+        }
+      }     
     });
   }
 
